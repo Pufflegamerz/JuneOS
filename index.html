@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>JuneOS</title>
+	<link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+<canvas id="canvas" width="500" height="300"></canvas>
+</body>
+<script type="text/javascript">
+var x = 0;
+var y = 0;
+var ci = false;
+var popups = ["Welcome to JuneOS!=30,60"];
+var c = document.getElementById('canvas').getContext("2d");
+setInterval(function (event) {
+	// Draw JuneOS GUI
+	c.fillStyle = "green";
+	c.fillRect(0,280,500,20);
+	c.fillStyle = "black";
+	c.font = "20px Arial";
+	c.fillText("JuneOS ~ ",0,298);
+	if (y == 280 && x > 90 && x < 170) {
+    	c.fillStyle = "white";
+    } else {
+    	c.fillStyle = "black";
+    }
+	c.fillText("Settings",100,298);
+	settings_o = false
+	drawPopups();
+	// Draw pointer
+	c.fillStyle = "black";
+	c.fillRect(x,y,10,20);
+},10);
+function drawPopups() {
+	for (var i = 0; i < popups.length; i++) {
+		c.fillStyle = "white";
+		var p_x = popups[i].split("=")[1].split(",")[0];
+		var p_y = popups[i].split("=")[1].split(",")[1];
+		var p_text = popups[i].split("=")[0];
+		c.fillRect(p_x,p_y,200,100);
+		c.fillStyle = "grey";
+		c.fillRect(p_x,p_y,200,20);
+		c.fillStyle = "black";
+		c.fillText("Popup",p_x,+p_y+15);
+		c.fillText(p_text,p_x,+p_y+35);
+		c.fillStyle = "red";
+		c.fillRect(+p_x+190,p_y,10,20);
+		c.fillStyle = "black";
+		c.fillText("x",+p_x+190,+p_y+15);
+	}
+}
+document.body.onkeydown = function(e){
+    if(e.keyCode == 40){
+    	c.clearRect(0,0,500,300);
+        y = y + 20;
+    } else if (e.keyCode == 38){
+        c.clearRect(0,0,500,300);
+        y = y - 20;
+    } else if (e.keyCode == 39){
+        c.clearRect(0,0,500,300);
+        x = x + 10;
+    } else if (e.keyCode == 37){
+        c.clearRect(0,0,500,300);
+        x = x - 10;
+    } else if (e.keyCode == 32) {
+    	for (var n = 0; n < popups.length; n++) {
+    		if (x == +popups[n].split("=")[1].split(",")[0]+190 && y == +popups[n].split("=")[1].split(",")[1]) {
+    			popups.splice(n);
+    			c.clearRect(0,0,500,300);
+    		} else if (y == +popups[n].split("=")[1].split(",")[1] && x > +popups[n].split("=")[1].split(",")[0]-10 && x < 230) {
+    			var popup = n;
+    			var int = setInterval(function () {
+    				if (ci == true) {
+    					ci = false;
+    					clearInterval(int);
+    				} else {
+						var p_text1 = popups[popup].split("=")[0];
+						popups[popup] = p_text1 + "=" + x + "," + y;
+    				}
+    			},10);
+    		}
+    	}
+    }
+}
+document.body.onkeyup = function (e) {
+	if (e.keyCode == 32) {
+		ci = true;
+		if (y == 280 && x > 90 && x < 170) {
+    		popups.push("Testing=300,80");
+    	}
+	}
+}
+</script>
+</html>
