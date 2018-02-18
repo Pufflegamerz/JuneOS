@@ -8,6 +8,8 @@
 <canvas id="canvas" width="500" height="300"></canvas>
 </body>
 <script type="text/javascript">
+var cursor;
+var backgroundcolor = "blue";
 var x = 0;
 var y = 0;
 var ci = false;
@@ -15,6 +17,10 @@ var popups = ["Welcome to JuneOS!=30,60"];
 var c = document.getElementById('canvas').getContext("2d");
 setInterval(function (event) {
 	// Draw JuneOS GUI
+	c.fillStyle = backgroundcolor;
+	var bg = document.createElement("IMG");
+	bg.src = "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1d/Bacin_zari_2015.jpg/1200px-Bacin_zari_2015.jpg";
+	c.drawImage(bg,0,0);
 	c.fillStyle = "green";
 	c.fillRect(0,280,500,20);
 	c.fillStyle = "black";
@@ -43,11 +49,19 @@ function drawPopups() {
 		c.fillRect(p_x,p_y,200,20);
 		c.fillStyle = "black";
 		c.fillText("Popup",p_x,+p_y+15);
-		c.fillText(p_text,p_x,+p_y+35);
 		c.fillStyle = "red";
 		c.fillRect(+p_x+190,p_y,10,20);
 		c.fillStyle = "black";
 		c.fillText("x",+p_x+190,+p_y+15);
+		if (p_text.endsWith("[input]")) {
+			c.fillText(p_text.replace("[input]",""),p_x,+p_y+35);
+			c.fillStyle = "lightgrey";
+			c.fillRect(+p_x+1,+p_y+40,100,20);
+			c.fillStyle = "black";
+			c.fillText(backgroundcolor,+p_x+1,+p_y+57);
+		} else {
+			c.fillText(p_text,p_x,+p_y+35);
+		}
 	}
 }
 document.body.onkeydown = function(e){
@@ -79,6 +93,8 @@ document.body.onkeydown = function(e){
 						popups[popup] = p_text1 + "=" + x + "," + y;
     				}
     			},10);
+    		} else if (y == +popups[n].split("=")[1].split(",")[1]+40 && x  > popups[n].split("=")[1].split(",")[0] - 10 && x < +popups[n].split("=")[1].split(",")[0] + 100) {
+    			backgroundcolor = prompt();
     		}
     	}
     }
@@ -87,9 +103,12 @@ document.body.onkeyup = function (e) {
 	if (e.keyCode == 32) {
 		ci = true;
 		if (y == 280 && x > 90 && x < 170) {
-    		popups.push("Testing=300,80");
+    		popups.push("Change Background:[input]=300,80");
     	}
 	}
 }
+setInterval(function() {
+
+},);
 </script>
 </html>
